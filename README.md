@@ -18,12 +18,11 @@ Digitalizar o controle manual de alunos, mensalidades e informações administra
 - Entidade Student
 - Repository
 - Service layer
-- CRUD inicial em desenvolvimento
+- Controller
+- CRUD inicial em completo
 
 ## Próximos passos
 
-- Controller REST
-- Busca por nome
 - Controle de mensalidades
 - Relatórios financeiros
 
