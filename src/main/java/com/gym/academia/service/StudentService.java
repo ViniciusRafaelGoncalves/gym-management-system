@@ -1,5 +1,6 @@
 package com.gym.academia.service;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -10,7 +11,9 @@ import com.gym.academia.entity.Student;
 import com.gym.academia.repository.StudentRepository;
 
 @Service
-public class StudentService {
+public class StudentService implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Autowired
 	private StudentRepository repository;
@@ -32,8 +35,7 @@ public class StudentService {
 	}
 	
 	public Student updateStudent(Long id, Student obj) {
-		Student entity = repository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Student not found"));
+		Student entity = repository.getReferenceById(id);
 		setIfNotNull(obj.getName(), entity::setName);
 		setIfNotNull(obj.getPhone(), entity::setPhone);
 		setIfNotNull(obj.getCpf(), entity::setCpf);

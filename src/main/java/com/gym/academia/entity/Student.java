@@ -1,5 +1,6 @@
 package com.gym.academia.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -15,20 +16,21 @@ import lombok.Builder;
 @Builder
 @Entity
 @Table(name = "students")
-public class Student {
+public class Student implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 	@Column(nullable = false)
 	private String name;
-	
+	@Column(nullable = false)
 	private String phone;
-	
 	@Column(nullable = false, unique = true, length = 11)
 	private String cpf;
+	@Column(nullable = false)
 	private LocalDate startDate;
+	@Column(nullable = false)
 	private Boolean active;
 
 	public Student() {
@@ -90,11 +92,11 @@ public class Student {
 
 	@PrePersist
 	public void prePersist() {
-	    if (startDate == null) {
-	        startDate = LocalDate.now();
-	    }
+		if (startDate == null) {
+			startDate = LocalDate.now();
+		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
