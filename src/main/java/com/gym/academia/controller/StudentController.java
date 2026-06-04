@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.gym.academia.entity.Student;
+import com.gym.academia.dto.StudentDTO;
 import com.gym.academia.service.StudentService;
+
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -31,38 +33,37 @@ public class StudentController implements Serializable{
 	private StudentService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Student>> findAll() {
-		List<Student> list = service.getStudents();
+	public ResponseEntity<List<StudentDTO>> findAll() {
+		List<StudentDTO> list = service.getStudents();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Student> findById(@PathVariable Long id) {
-		Student obj = service.findById(id);
+	public ResponseEntity<StudentDTO> findById(@PathVariable Long id) {
+		StudentDTO obj = service.getStudentById(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
 	@GetMapping(value = "/search")
-	public ResponseEntity<List<Student>> findByName(@RequestParam String name) {
-		List<Student> list = service.findByName(name);
+	public ResponseEntity<List<StudentDTO>> findByName(@RequestParam String name) {
+		List<StudentDTO> list = service.findByName(name);
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Student> createStudent(@RequestBody Student obj) {
+	public ResponseEntity<StudentDTO> createStudent(@RequestBody @Valid StudentDTO obj) {
 		obj = service.addStudent(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.id()).toUri();
 		return ResponseEntity.created(uri).body(obj);
 	}
-	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student obj){
+	public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody @Valid StudentDTO obj){
 		obj = service.updateStudent(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Student> deleteById(@PathVariable Long id){
+	public ResponseEntity<Void> deleteById(@PathVariable Long id){
 		service.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}

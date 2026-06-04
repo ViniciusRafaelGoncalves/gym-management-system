@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +13,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 
 @Builder
@@ -23,16 +28,21 @@ public class Student implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
+	@NotBlank(message = "O campo nome não pode ser nulo ou vazio")
 	private String name;
+	@Pattern(regexp = "^\\(?\\d{2}\\)?\\s?(9?\\d{4})-?\\d{4}$", 
+			message = "Número de telefone inválido")
 	@Column(nullable = false)
 	private String phone;
+	@CPF(message = "CPF inválido")
 	@Column(nullable = false, unique = true, length = 11)
 	private String cpf;
-	@Column(nullable = false)
+	@PastOrPresent(message = "Não é possível iniciar no futuro")
+	@Column(nullable = false)                                                                                    
 	private LocalDate startDate;
 	@Column(nullable = false)
 	private Boolean active;
-
+                           
 	public Student() {
 		super();
 	}
@@ -45,7 +55,6 @@ public class Student implements Serializable{
 		this.startDate = startDate;
 		this.active = true;
 	}
-
 	public String getName() {
 		return name;
 	}
